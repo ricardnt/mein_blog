@@ -1,32 +1,39 @@
-import { useEffect, useState } from 'react'
-import { db } from './config/firebase' // Importamos tu config
-import { collection, getDocs } from 'firebase/firestore'
+import { Routes, Route, Link } from 'react-router-dom';
+import { useBlog } from './context/BlogContext';
+
 
 function App() {
-  const [status, setStatus] = useState('Probando conexión...')
-
-  useEffect(() => {
-    const probarFirebase = async () => {
-      try {
-        // Intentamos leer una colección llamada "posts" (aunque esté vacía)
-        const querySnapshot = await getDocs(collection(db, "posts"));
-        console.log("🔥 Firebase responde:", querySnapshot);
-        setStatus('✅ ¡Conexión Exitosa! Firebase está listo.');
-      } catch (error) {
-        console.error("❌ Error de conexión:", error);
-        setStatus('❌ Error: Revisa la consola (F12) para ver el detalle.');
-      }
-    }
-
-    probarFirebase();
-  }, [])
+  const { state } = useBlog();
 
   return (
-    <div style={{ padding: '50px', fontFamily: 'sans-serif' }}>
-      <h1>Estado de Firebase:</h1>
-      <h2>{status}</h2>
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '20px', fontFamily: 'sans-serif' }}>
+      
+      {/* Navegación Básica */}
+      <nav style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #ccc', paddingBottom: '10px', marginBottom: '20px' }}>
+        <Link to="/" style={{ textDecoration: 'none', color: '#333', fontSize: '24px', fontWeight: 'bold' }}>
+          Mi Blog
+        </Link>
+        <Link to="/create" style={{ padding: '10px 15px', background: '#007bff', color: 'white', textDecoration: 'none', borderRadius: '5px' }}>
+          + Crear Nuevo Post
+        </Link>
+      </nav>
+
+      {/* Manejo de estados globales de la base de datos */}
+      {state.error && <p style={{ color: 'red' }}>Error: {state.error}</p>}
+      {state.loading && <p>Cargando información desde Firebase...</p>}
+
+      {/* Aquí vivirán nuestras páginas */}
+      {!state.loading && (
+        <Routes>
+          {/* Descomentaremos esto a medida que creemos los archivos */}
+          {/* <Route path="/" element={<HomePage />} /> */}
+          {/* <Route path="/post/:id" element={<PostDetail />} /> */}
+          {/* <Route path="/create" element={<CreatePost />} /> */}
+        </Routes>
+      )}
+
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
