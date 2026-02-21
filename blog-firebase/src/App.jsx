@@ -4,35 +4,35 @@ import HomePage from './pages/HomePage';
 import CreatePost from './pages/CreatePost';
 import PostDetail from './pages/PostDetail';
 
+// Estilos movidos fuera para mayor orden
+const styles = {
+  container: { maxWidth: '900px', margin: '0 auto', padding: '40px 20px', fontFamily: 'Inter, sans-serif' },
+  nav: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' },
+  logo: { fontSize: '1.5rem', fontWeight: '800', color: '#646cff', textDecoration: 'none', letterSpacing: '-1px' },
+  button: { padding: '12px 24px', background: '#646cff', color: 'white', textDecoration: 'none', borderRadius: '8px', fontWeight: '600', transition: '0.3s' }
+};
+
 function App() {
   const { state } = useBlog();
 
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '20px'}}>
-      
-      {/* Navegación Básica */}
-      <nav style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #0E0E17', paddingBottom: '10px', marginBottom: '20px' }}>
-        <Link to="/" style={{ textDecoration: 'none', color: '#333', fontSize: '24px', fontWeight: 'bold' }}>
-          Mi Blog
-        </Link>
-        <Link to="/create" style={{ padding: '10px 15px', background: '#007bff', color: 'white', textDecoration: 'none', borderRadius: '5px' }}>
-          + Crear Nuevo Post
-        </Link>
+    <div style={styles.container}>
+      <nav style={styles.nav}>
+        <Link to="/" style={styles.logo}>DevLog_</Link>
+        <Link to="/create" style={styles.button}>Redactar</Link>
       </nav>
 
-      {/* Manejo de estados globales de la base de datos */}
-      {state.error && <p style={{ color: 'red' }}>Error: {state.error}</p>}
-      {state.loading && <p>Cargando información desde Firebase...</p>}
-
-      {/* Aquí vivirán nuestras páginas */}
-      {!state.loading && (
+      {state.error && <div style={{background: '#ffebe9', color: '#ce3c2e', padding: '1rem', borderRadius: '8px', marginBottom: '20px'}}>⚠️ {state.error}</div>}
+      
+      {state.loading ? (
+        <div style={{textAlign: 'center', marginTop: '50px'}}>Sincronizando con la nube...</div>
+      ) : (
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/post/:id" element={<PostDetail />} />
           <Route path="/create" element={<CreatePost />} />
         </Routes>
       )}
-
     </div>
   );
 }
