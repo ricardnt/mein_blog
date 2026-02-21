@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "blog-carlos-859d6"
-  }
+    "blog": "blog-e5e54"
+  },
+  "targets": {},
+  "etags": {}
 }
